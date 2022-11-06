@@ -12,6 +12,6 @@ assignees: yoon1013
 >description
 
 ##Todo
--[ ] todo1
--[ ] todo2
--[ ] todo3
+- [ ] todo1
+- [ ] todo2
+- [ ] todo3
