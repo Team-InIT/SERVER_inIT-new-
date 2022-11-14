@@ -3,8 +3,9 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
-const imageUploader = require('./imageUploader');
+const imageUploader = require('./config/imageUploader');
 
 dotenv.config();
 const app = express();
@@ -46,17 +47,26 @@ app.post('/test', async function (req,res) {
 
 //s3 연동 테스트
 app.post('/img', imageUploader.single("img"), (req,res,next) => {
-    console.log(req.file);
-    console.log(process.env.S3_ACCESS_KEY_ID);
-    console.log(process.env.S3_SECRET_ACCESS_KEY);
+    console.log('/img api start');
+    try{
+        console.log("req.file", req.file);
+    } catch(err) {
+        console.error(err);
+    }
+    //console.log(req.file.filename);
     res.json({
-        "url": req.file.location, //이미지 파일 경로
+        //"url": req.file.location, //이미지 파일 경로
+        "code": "success"
     });
 });
 
+app.get('/', (req,res) => {
+    res.send('54.180.74.18');
+})
+
 //일반 회원 회원가입
 app.post('/signUp_general', async function(req,res){
-    console.log('/db_test');
+    console.log('/signUp_general');
     let mID = req.body.mID;
     let mPW = req.body.mPW;
     let mName = req.body.mName;
