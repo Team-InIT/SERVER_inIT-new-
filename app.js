@@ -28,6 +28,9 @@ app.use(session({
     name: 'session-cookie',
 }));
 
+//데이터베이스 설정
+const db_config = require('./config/config');
+const conn = db_config.init();
 
 app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 서버 대기 중');
@@ -48,5 +51,40 @@ app.post('/img', imageUploader.single("img"), (req,res,next) => {
     console.log(process.env.S3_SECRET_ACCESS_KEY);
     res.json({
         "url": req.file.location, //이미지 파일 경로
+    });
+});
+
+//일반 회원 회원가입
+app.post('/signUp_general', async function(req,res){
+    console.log('/db_test');
+    let mID = req.body.mID;
+    let mPW = req.body.mPW;
+    let mName = req.body.mName;
+    let mEmail = req.body.mEmail;
+    let mDept = req.body.mDept;
+    let mChat = req.body.mChat;
+    let mEdu = req.body.mEdu;
+    let mGender = req.body.mGender;
+    let mPosition = req.body.mPosition;
+
+    var params = [mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition];
+
+    var sql = 'INSERT INTO init_new.member (mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition) VALUES(?,?,?,?,?,?,?,?,?)';
+
+    var resultCode, message;
+
+    conn.query(sql, params, function(err,result) {
+        if(err) {
+            console.error(err);
+            resultCode = 500;
+            message = "회원가입에 실패하였습니다. 다시 시도해주세요";
+        } else {
+            resultCode = 200,
+            message = "회원가입이 완료되었습니다";
+        }
+        res.json({
+            'code': resultCode,
+            'message': message
+        });
     });
 });
