@@ -56,7 +56,7 @@ app.post('/img', imageUploader.single("img"), (req,res,next) => {
     //console.log(req.file.filename);
     res.json({
         //"url": req.file.location, //이미지 파일 경로
-        "code": "success"
+        "resultCode": "success"
     });
 });
 
@@ -96,7 +96,7 @@ app.post('/signUp_general', async function(req,res){
             message = "회원가입이 완료되었습니다";
         }
         res.json({
-            'code': resultCode,
+            'resultCode': resultCode,
             'message': message
         });
     });
@@ -132,7 +132,7 @@ app.post('/signUp_company', async function(req,res) {
             message = "회원가입이 완료되었습니다";
         }
         res.json({
-            'code': resultCode,
+            'resultCode': resultCode,
             'message': message
         });
     });
@@ -168,7 +168,7 @@ app.post('/isDuplicate', async function(req,res){
                 }
             }
             res.json({
-                "code": resultCode,
+                "resultCode": resultCode,
                 "isDuplicate": isDuplicate,
                 "message": message
             });
@@ -194,7 +194,7 @@ app.post('/isDuplicate', async function(req,res){
                 }
             }
             res.json({
-                "code": resultCode,
+                "resultCode": resultCode,
                 "isDuplicate": isDuplicate,
                 "message": message
             });
