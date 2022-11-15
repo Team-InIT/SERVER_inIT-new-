@@ -101,3 +101,39 @@ app.post('/signUp_general', async function(req,res){
         });
     });
 });
+
+//기업회원 회원가입
+app.post('/signUp_company', async function(req,res) {
+    console.log('/signUp_company');
+    let cID = req.body.cID;
+    let cPW = req.body.cPW;
+    let cManagerName = req.body.cManagerName;
+    let cManagerEmail = req.body.cManagerEmail;
+    let cManagerCall = req.body.cManagerCall;
+    let cType = req.body.cType;
+    let cRegistNum = req.body.cRegistNum;
+    let cName = req.body.cName;
+    let cBoss = req.body.cBoss;
+    let cAddress = req.body.cAddress;
+
+    var params = [cID, cPW, cManagerName, cManagerEmail, cManagerCall, cType, cRegistNum, cName, cBoss, cAddress];
+
+    var sql = "INSERT INTO init_new.company (cID, cPW, cManagerName, cManagerEmail, cManagerCall, cType, cRegistNum, cName, cBoss, cAddress) VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+    var resultCode, message;
+
+    conn.query(sql, params, function(err, result) {
+        if(err) {
+            console.error(err);
+            resultCode = 500;
+            message = "회원가입에 실패하였습니다. 다시 시도해주세요";
+        } else{
+            resultCode = 200,
+            message = "회원가입이 완료되었습니다";
+        }
+        res.json({
+            'code': resultCode,
+            'message': message
+        });
+    });
+});
