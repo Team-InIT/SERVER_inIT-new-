@@ -241,7 +241,7 @@ app.post('/login', async function(req,res) {
                 "resultCode": resultCode,
                 "cNum": num,
                 "cName": name,
-                "messge": message
+                "message": message
             });
         });
     } else {//일반 회원
@@ -269,7 +269,7 @@ app.post('/login', async function(req,res) {
                 "resultCode": resultCode,
                 "mNum": num,
                 "mName": name,
-                "messge": message
+                "message": message
             });
         });
     }
