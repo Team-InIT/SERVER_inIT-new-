@@ -201,3 +201,76 @@ app.post('/isDuplicate', async function(req,res){
         });
     }
 });
+
+//로그인
+app.post('/login', async function(req,res) {
+    console.log('/login');
+
+    let isCompany = req.body.isCompany;
+    let id = req.body.id;
+    let pw = req.body.pw;
+
+    var sql = "";
+
+    var params = [id, pw];
+
+    var resultCode, num, name, message;
+
+    if(isCompany) {//기업 회원
+        sql = "SELECT * from init_new.company WHERE cID = ? and cPW = ?";
+        conn.query(sql, params, function(err,result) {
+            if(err) {
+                resultCode = 500;
+                num = null;
+                name = null;
+                message = "로그인에 실패했습니다. 다시 시도해주세요";
+            } else {
+                if(result.length === 0) {
+                    resultCode = 200;
+                    num = null;
+                    name = null;
+                    message = "아이디 또는 비밀번호를 확인해주세요";
+                } else {
+                    resultCode = 200;
+                    num = result[0].cNum;
+                    name = result[0].cName;
+                    message =`${name}님 환영합니다`;
+                }
+            }
+            res.json({
+                "resultCode": resultCode,
+                "cNum": num,
+                "cName": name,
+                "messge": message
+            });
+        });
+    } else {//일반 회원
+        sql = "SELECT * from init_new.member WHERE mID = ? and mPW = ?";
+        conn.query(sql, params, function(err,result) {
+            if(err) {
+                resultCode = 500;
+                num = null;
+                name = null;
+                message = "로그인에 실패했습니다. 다시 시도해주세요";
+            } else {
+                if(result.length === 0) {
+                    resultCode = 200;
+                    num = null;
+                    name = null;
+                    message = "아이디 또는 비밀번호를 확인해주세요";
+                } else {
+                    resultCode = 200;
+                    num = result[0].mNum;
+                    name = result[0].mName;
+                    message =`${name}님 환영합니다`;
+                }
+            }
+            res.json({
+                "resultCode": resultCode,
+                "mNum": num,
+                "mName": name,
+                "messge": message
+            });
+        });
+    }
+});
