@@ -76,10 +76,13 @@ app.post('/signUp_general', async function(req,res){
     let mEdu = req.body.mEdu;
     let mGender = req.body.mGender;
     let mPosition = req.body.mPosition;
+    let mInterest = req.body.mInterest;
+    mInterest = mInterest.join();
+    console.log(mInterest);
 
-    var params = [mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition];
+    var params = [mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition, mInterest];
 
-    var sql = 'INSERT INTO init_new.member (mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition) VALUES(?,?,?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO init_new.member (mID, mPW, mName, mEmail, mDept, mChat, mEdu, mGender, mPosition, mInterest) VALUES(?,?,?,?,?,?,?,?,?,?)';
 
     var resultCode, message;
 
