@@ -137,3 +137,67 @@ app.post('/signUp_company', async function(req,res) {
         });
     });
 });
+
+//아이디 중복확인
+app.post('/isDuplicate', async function(req,res){
+    console.log('/isDuplicate');
+    let isCompany = req.body.isCompany;
+    let id = req.body.id;
+
+    var sql = "";
+
+    var resultCode, isDuplicate, message;
+
+    if(isCompany) { //기업회원
+        sql = "SELECT * from init_new.company WHERE cID = ?";
+        conn.query(sql, [id], function(err, result){
+            if(err) {
+                console.error(err);
+                resultCode = 500;
+                isDuplicate = null;
+                message = "오류가 발생했습니다. 다시 시도해주세요";
+            } else {
+                if(result.length !== 0) {//중복
+                    resultCode = 200;
+                    isDuplicate = true;
+                    message = "이미 사용 중인 아이디입니다";
+                } else {
+                    resultCode = 200,
+                    isDuplicate = false,
+                    message = "사용 가능한 아이디입니다";
+                }
+            }
+            res.json({
+                "code": resultCode,
+                "isDuplicate": isDuplicate,
+                "message": message
+            });
+        })
+    } else {//일반회원
+        sql = "SELECT * from init_new.member WHERE mID = ?";
+        conn.query(sql, [id], function(err, result){
+            console.log(result[0]);
+            if(err) {
+                console.error(err);
+                resultCode = 500;
+                isDuplicate = null;
+                message = "오류가 발생했습니다. 다시 시도해주세요";
+            } else {
+                if(result.length !== 0) {//중복
+                    resultCode = 200;
+                    isDuplicate = true;
+                    message = "이미 사용 중인 아이디입니다";
+                } else {
+                    resultCode = 200,
+                    isDuplicate = false,
+                    message = "사용 가능한 아이디입니다";
+                }
+            }
+            res.json({
+                "code": resultCode,
+                "isDuplicate": isDuplicate,
+                "message": message
+            });
+        });
+    }
+});
