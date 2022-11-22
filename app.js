@@ -274,3 +274,78 @@ app.post('/login', async function(req,res) {
         });
     }
 });
+
+//프로젝트 등록
+app.post('/projectUpload', async function(req,res) {
+    console.log('/projectUpload');
+
+    let isCompany = req.body.isCompany;
+    let pTitle = req.body.pTitle;
+    let pType = req.body.pType;
+    let pField = req.body.pField;
+    let pScale = req.body.pScale;
+    let pRecruitDue = req.body.pRecruitDue;
+    let pStart = req.body.pStart;
+    let pDue = req.body.pDue;
+    let pOn = req.body.pOn;
+    let pState = req.body.pState;
+    let pWorkingTime = req.body.pWorkingTime;
+    let pPlan = req.body.pPlan;
+    let pDesign = req.body.pDesign;
+    let pDevelop = req.body.pDevelop;
+    let pStack = req.body.pStack;
+    let pDescription = req.body.pDescription;
+
+    pStack = pStack.join();
+
+    var resultCode, message;
+
+    if(isCompany) {//기업회원
+        let cNum = req.body.cNum;
+        var params = [pTitle, pType, pField, pScale, pRecruitDue, pStart, pDue, pOn, pState, pWorkingTime, pPlan, pDesign, pDevelop, pStack, pDescription, cNum];
+
+        var sql = "INSERT INTO init_new.project (pTitle, pType, pField, pScale, pRecruitDue, pStart, pDue, pOn, pState, pWorkingTime, pPlan, pDesign, pDevelop, pStack, pDescription, cNum)";
+        sql += "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        conn.query(sql, params, function(err,result){
+            if(err) {
+                console.error(err);
+                resultCode = 500;
+                message = "등록에 실패했습니다. 다시 시도해주세요";
+            } else {
+                resultCode = 200;
+                message = "등록이 완료되었습니다."
+            }
+            res.json({
+                "resultCode": resultCode,
+                "message": message
+            });
+        });
+    } else {//일반회원
+        let mNum = req.body.mNum;
+
+        var params = [pTitle, pType, pField, pScale, pRecruitDue, pStart, pDue, pOn, pState, pWorkingTime, pPlan, pDesign, pDevelop, pStack, pDescription, mNum];
+
+        var sql = "INSERT INTO init_new.project (pTitle, pType, pField, pScale, pRecruitDue, pStart, pDue, pOn, pState, pWorkingTime, pPlan, pDesign, pDevelop, pStack, pDescription, mNum)";
+        sql += "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        conn.query(sql, params, function(err,result){
+            if(err) {
+                console.error(err);
+                resultCode = 500;
+                message = "등록에 실패했습니다. 다시 시도해주세요";
+            } else {
+                resultCode = 200;
+                message = "등록이 완료되었습니다."
+            }
+            res.json({
+                "resultCode": resultCode,
+                "message": message
+            });
+        });
+    }
+});
+//홈화면
+//프로젝트 자세히 보기
+//피드 등록
+//피드화면
