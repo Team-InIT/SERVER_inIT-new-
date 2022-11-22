@@ -352,6 +352,7 @@ app.post('/apply', async function (req, res) {
 
     let mNum = req.body.mNum;
     let pNum = req.body.pNum;
+    let rPosition = req.body.rPosition;
 
     var resultCode, message;
 
@@ -387,8 +388,8 @@ app.post('/apply', async function (req, res) {
                             "message": message
                         });
                     } else {//중복지원이 아니라면
-                        var sql2 = "INSERT INTO init_new.recruit (mNum, pNum) VALUES(?,?)";
-                        conn.query(sql2, [mNum, pNum], function (err, result) {
+                        var sql2 = "INSERT INTO init_new.recruit (mNum, pNum, rPosition) VALUES(?,?,?)";
+                        conn.query(sql2, [mNum, pNum, rPosition], function (err, result) {
                             if (err) {
                                 console.error(err);
                                 resultCode = 500;
