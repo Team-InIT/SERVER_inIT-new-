@@ -32,6 +32,7 @@ app.use(session({
 
 //데이터베이스 설정
 const db_config = require('./config/config');
+const checkWriter = require('./config/checkWriter');
 const conn = db_config.init();
 
 app.listen(app.get('port'), () => {
@@ -357,7 +358,7 @@ app.post('/apply', async function (req, res) {
     var resultCode, message;
 
     //글쓴이인지 확인
-    CheckWriter(true, mNum, pNum)
+    CheckWriter(true,false, mNum, pNum)
         .then((isWriter) => {
             console.log("isWirter: " + isWriter);
             if (isWriter) {//글쓴이임
@@ -411,8 +412,41 @@ app.post('/apply', async function (req, res) {
             console.error(err);
         });
 });
-
 //프로젝트 참여 승인
 //홈화면
 //프로젝트 자세히 보기
+app.post('/projectDetail', function(req,res){
+    console.log('/projectDetail');
+    let isCompany = req.body.isCompany;
+    let userNum = req.body.userNum;
+    let pNum = req.body.pNum;
+
+    var resultCode, message, isWriter;
+
+    //글쓴인지 확인
+    isWriter = checkWriter(true, isCompany, userNum, pNum);
+
+    //프로젝트 정보+승인된 사용자
+    var sql = "SELECT P.*, R.rPoision, M.mNum, M.mName, M.mPhoto From init_new.project P "
+    + "JOIN init_new.recruit R ON P.pNum = R.pNum "
+    + "JOIN init_new.member M ON R.mNum = M.mNum "
+    + " WHERE P.pNum=? and R.rApproval=1";
+
+    var pTitle, pType, pFiedl, pScale, pRecruitStart, pRecruitDue, pStart, pDue;
+    var pOn, pState, pWorkingTime, pPlan, pDesign, pDevelop, pStack, pDescription;
+
+    conn.query(sql, pNum, function(err,result){
+        if(err){
+            console.error(err);
+            resultCode = 500;
+            message = "오류가 발생했습니다. 다시 시도해주세요.";
+        }else {
+            resultCode = 200;
+            message = "검색 성공";
+            for(var i=0; i<result.length; i++) {
+
+            }
+        }
+    });
+});
 //피드 등록
